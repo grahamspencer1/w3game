@@ -15,10 +15,8 @@ canvas {
 var redGamePiece, blueGamePiece, yellowGamePiece;
 
 function startGame() {
-    myGameArea.start();
-    redGamePiece = new component(75, 75, "red", 10, 10);
-    blueGamePiece = new component(75, 75, "blue", 50, 50);
-    yellowGamePiece = new component(75, 75, "yellow", 10, 110);
+  myGamePiece = new component(30, 30, "red", 10, 120);
+  myGameArea.start();
 }
 
 var myGameArea = {
@@ -36,29 +34,59 @@ var myGameArea = {
 }
 
 function component(width, height, color, x, y) {
-    this.width = width;
-    this.height = height;
-    this.x = x;
-    this.y = y;
-    this.update = function() {
-      ctx = myGameArea.context;
-      ctx.fillStyle = color;
-      ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
+  this.width = width;
+  this.height = height;
+  this.speedX = 0;
+  this.speedY = 0;
+  this.x = x;
+  this.y = y;
+  this.update = function() {
+    ctx = myGameArea.context;
+    ctx.fillStyle = color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
+  this.newPos = function() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+
+  }
 }
 
 function updateGameArea() {
   myGameArea.clear();
-  redGamePiece.x += 1;
-  yellowGamePiece.x += 1;
-  yellowGamePiece.y += 1;
-  blueGamePiece.x += 1;
-  blueGamePiece.y -= 1;
-  redGamePiece.update();
-  blueGamePiece.update();
-  yellowGamePiece.update();
+  myGamePiece.newPos();
+  myGamePiece.update();
+}
+
+function moveup() {
+  myGamePiece.speedY -= 2;
+}
+
+function movedown() {
+  myGamePiece.speedY += 2;
+}
+
+function moveleft() {
+  myGamePiece.speedX -= 2;
+}
+
+function moveright() {
+  myGamePiece.speedX += 2;
+}
+
+function stopMove() {
+  myGamePiece.speedX = 0;
+  myGamePiece.speedY = 0;
 }
 
 </script>
+
+<div style="text-align:center;width:480px;">
+  <button onmousedown="moveup()" onmouseup="stopMove()" ontouchstart="moveup()">UP</button><br><br>
+  <button onmousedown="moveleft()" onmouseup="stopMove()" ontouchstart="moveleft()">LEFT</button>
+  <button onmousedown="moveright()" onmouseup="stopMove()" ontouchstart="moveright()">RIGHT</button><br><br>
+  <button onmousedown="movedown()" onmouseup="stopMove()" ontouchstart="movedown()">DOWN</button>
+</div>
+
 </body>
 </html>
